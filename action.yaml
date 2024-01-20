@@ -1,0 +1,49 @@
+name: Configure AWS Profile
+
+description: Configures an AWS IAM as an aws config profile.
+
+branding:
+  icon: 'cloud'
+  color: 'orange'
+
+inputs:
+  access-key:
+    required: true
+    description: 'access key'
+  secret-key:
+    required: true
+    description: 'secret key'
+  profile:
+    required: true
+    description: 'Name of profile to be created.'
+  region:
+    required: false
+    description: 'Name of AWS region to be used.'
+    default: 'ap-northeast-2'
+
+runs:
+  using: "composite"
+  steps:
+  - name: Configure AWS Credentials
+    uses: aws-actions/configure-aws-credentials@v2
+    with:
+      role-to-assume: ${{ inputs.role-arn }}
+      aws-region: ${{ inputs.region }}
+      mask-aws-account-id: 'no'
+
+  - name: Setup Profile
+    shell: bash
+    run: |
+      aws configure set region ${{ inputs.region }} --profile ${{ inputs.profile-name }}
+      aws configure set aws_access_key_id ${{ inputs.access-key }} --profile ${{ inputs.profile-name }}
+      aws configure set aws_secret_access_key ${{ inputs.secret-key }} --profile ${{ inputs.profile-name }}
+
+  - name: Reset AWS Environment Variables
+    shell: bash
+    run: |
+      echo "AWS_ACCESS_KEY_ID=" >> $GITHUB_ENV
+      echo "AWS_SECRET_ACCESS_KEY=" >> $GITHUB_ENV
+
+  - name: Check Profile
+    shell: bash
+    run: aws sts get-caller-identity --profile ${{ inputs.profile-name }}
