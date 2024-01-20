@@ -25,11 +25,11 @@ runs:
   using: "composite"
   steps:
   - name: Configure AWS Credentials
-    uses: aws-actions/configure-aws-credentials@v2
+    uses: aws-actions/configure-aws-credentials@v4
     with:
-      role-to-assume: ${{ inputs.role-arn }}
       aws-region: ${{ inputs.region }}
-      mask-aws-account-id: 'no'
+      aws-access-key-id: ${{ inputs.access-key }}
+      aws-secret-access-key: ${{ inputs.secret-key }}
 
   - name: Setup Profile
     shell: bash
