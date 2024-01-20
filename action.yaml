@@ -34,9 +34,9 @@ runs:
   - name: Setup Profile
     shell: bash
     run: |
-      aws configure set region ${{ inputs.region }} --profile ${{ inputs.profile-name }}
-      aws configure set aws_access_key_id ${{ inputs.access-key }} --profile ${{ inputs.profile-name }}
-      aws configure set aws_secret_access_key ${{ inputs.secret-key }} --profile ${{ inputs.profile-name }}
+      aws configure set region ${{ inputs.region }} --profile ${{ inputs.profile }}
+      aws configure set aws_access_key_id ${{ inputs.access-key }} --profile ${{ inputs.profile }}
+      aws configure set aws_secret_access_key ${{ inputs.secret-key }} --profile ${{ inputs.profile }}
 
   - name: Reset AWS Environment Variables
     shell: bash
@@ -46,4 +46,4 @@ runs:
 
   - name: Check Profile
     shell: bash
-    run: aws sts get-caller-identity --profile ${{ inputs.profile-name }}
+    run: aws sts get-caller-identity --profile ${{ inputs.profile }}
